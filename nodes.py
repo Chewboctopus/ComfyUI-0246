@@ -1055,7 +1055,14 @@ def map_node_over_list_res_handle(result, *args, **kwargs):
 
 lib0246.hijack(execution, "map_node_over_list", map_node_over_list_param_handle, map_node_over_list_res_handle)
 # Honestly not many option beside hijacking _map_node_over_list
-lib0246.hijack(execution, "_map_node_over_list", map_node_over_list_param_handle, map_node_over_list_res_handle)
+# always hook the public one
+lib0246.hijack(execution, "map_node_over_list",
+               map_node_over_list_param_handle, map_node_over_list_res_handle)
+
+# only hook the legacy private one if it exists (older ComfyUI)
+if hasattr(execution, "_map_node_over_list"):
+    lib0246.hijack(execution, "_map_node_over_list",
+                   map_node_over_list_param_handle, map_node_over_list_res_handle)
 
 CLASS_LIST = None
 
